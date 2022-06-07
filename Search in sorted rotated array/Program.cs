@@ -13,29 +13,28 @@ namespace Search_in_sorted_rotated_array
 
         static int Search(int[] nums, int target)
         {
-            if (nums.Length == 0) return -1;
-            int low = 0;
-            int high = nums.Length - 1;
-            while (low <= high)
-            {
-                int mid = (low + high) / 2;
-                if (nums[mid] == target) return mid;
-                if (nums[low] <= nums[mid]) // 3 4 5 6 0 1 2
-                {
-                    if (target >= nums[low] && target <= nums[mid])
-                        high = mid;
-                    else
-                        low = mid + 1;
-                }
-                else // 5 6 0 1 2 3 4
-                {
-                    if (target >= nums[mid] && target <= nums[high])
-                        low = mid;
-                    else
-                        high = mid - 1;
-                }
+           int l = 0;
+          int r = nums.Length -1;
+          while(l <= r){
+            int mid = l + (r - l)/2;
+            if(nums[mid] == target) return mid;
+            // check for left sorted portion
+            else if(nums[l] <= nums[mid]){
+              // When left sorted check target belongs to left portion or to right of mid
+              // 4,5,6,7,0,1,2 - so left portion would be 4, 5, 6, 7 and target 0 < nums[mid] , 0 < 7 , so we got to know as 0 < 7 so we have to search left side portion ,but 0 also less than nums[l], i.e 4, 0 < 4. As we can not find the target 0 in left portion target can be available at right portion.
+              if(target < nums[l] || target > nums[mid])
+                l = mid + 1;
+              else
+                r = mid -1;
+            } else {
+              if(target > nums[r] || target < nums[mid])
+                r = mid -1;
+              else
+                l = mid + 1;
             }
-            return -1;
+          }
+
+          return -1;
         }
     }
 }
